@@ -1,13 +1,18 @@
 function AppView() {
-    var matrixView = new MatrixView();
-    var summaryView = new SummaryView();
+  // Instanciates two constructors inside a parrent constructor
+  var matrixView = new MatrixView();
+  var summaryView = new SummaryView();
+  // render method gets root element
+  this.render = function (selector) {
+    // gets access to it
+    var element = document.getElementById(selector);
+    // shows scores
+    summaryView.show(element);
 
-    this.render = function (selector) {
-        var element = document.getElementById(selector);
-        summaryView.show(element);
-        matrixView.show(element);
-    }
+    //shows elements
+    matrixView.show(element);
+  };
 }
 
 var appView = new AppView();
-appView.render('root');
+appView.render("root");

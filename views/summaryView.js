@@ -1,3 +1,24 @@
 function SummaryView() {
-
+  this.summaryModel = new SummaryModel();
+  this.template = document.getElementById("summaryTemplate").innerHTML;
+  this.className = "summary";
+  BaseView.call(this);
 }
+
+SummaryView.prototype = Object.create(BaseView.prototype);
+SummaryView.prototype.constructor = SummaryView;
+
+SummaryView.prototype.beforeRender = function () {
+  this.summaryModel.subscribe("attrIncrease", this.display, this);
+  console.log(this.summaryModel.subscribers);
+};
+
+SummaryView.prototype.render = function () {
+  return templateStr(this.template, this.summaryModel.attributes);
+};
+
+SummaryView.prototype.afterRender = function () {};
+
+SummaryView.prototype.display = function () {
+  document.getElementsByClassName("row")[0].style.backgroundColor = "blue";
+};
