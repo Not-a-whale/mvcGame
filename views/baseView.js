@@ -8,6 +8,7 @@ BaseView.prototype.show = function (element) {
   this.rootElement.classList.add(this.className);
   element.appendChild(this.rootElement);
   this.afterRender();
+  this.show.root = element;
 };
 BaseView.prototype.render = function () {
   throw new Error("Your component should have a render message");
@@ -17,9 +18,11 @@ BaseView.prototype.beforeRender = function () {};
 BaseView.prototype.afterRender = function () {};
 BaseView.prototype.reRender = function () {
   this.beforeUpdate();
-  this.rootElement.innerHtml = this.render();
-  this.afterUpdate();
+  this.rootElement.innerHTML = this.render();
+  this.afterUpdate(this.rootElement);
 };
 
 BaseView.prototype.beforeUpdate = function () {};
-BaseView.prototype.afterUpdate = function () {};
+BaseView.prototype.afterUpdate = function (elem) {
+  this.show.root.prepend(elem);
+};

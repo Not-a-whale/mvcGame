@@ -4,6 +4,10 @@ function SummaryModel() {
     totalScore: 0,
     bestScore: 0,
   };
+  var instance = this;
+  SummaryModel = function () {
+    return instance;
+  };
 }
 
 SummaryModel.prototype = Object.create(BaseModel.prototype);
@@ -12,8 +16,17 @@ SummaryModel.prototype.constructor = SummaryModel;
 SummaryModel.prototype.reset = function () {};
 
 SummaryModel.prototype.add = function () {
-  this.bestScore++;
-
+  for (var i in this.attributes) {
+    i = this.attributes[i]++;
+  }
+  console.log(this.attributes);
   this.publish("attrIncrease");
-  console.log(this.subscribers);
+};
+
+SummaryModel.prototype.decrease = function () {
+  for (var i in this.attributes) {
+    i = this.attributes[i]--;
+  }
+  console.log(this.attributes);
+  this.publish("attrDecrease");
 };

@@ -28,7 +28,6 @@ MatrixModel.prototype.findRandomNumber = function () {
 MatrixModel.prototype.findRandomRowExist = function () {
   var randomRow = this.findRandomCell();
   if (this.grid[randomRow].includes("")) {
-    console.log(this);
     return randomRow;
   } else {
     return this.findRandomRowExist();
@@ -71,4 +70,5 @@ MatrixModel.prototype.displayActionResults = function (key) {
 // Action depends on user click New Game event
 MatrixModel.prototype.startNewGame = function () {
   this.publish("changeState");
+  console.log(this.grid);
 };
