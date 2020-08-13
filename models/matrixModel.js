@@ -76,6 +76,7 @@ MatrixModel.prototype.slide = function (row, key) {
   var arr = row.filter((el) => el);
   var missing = 4 - arr.length;
   var zeros = Array(missing).fill("");
+  var i = 0;
   if (key === "left") {
     arr = arr.concat(zeros);
   }
@@ -83,7 +84,7 @@ MatrixModel.prototype.slide = function (row, key) {
     arr = zeros.concat(arr);
   }
   if (key === "up") {
-    this.grid = this.rotateGrid(this.grid);
+    arr = arr.concat(zeros);
   }
 
   return arr;
@@ -94,10 +95,16 @@ MatrixModel.prototype.move = function (key) {
     gridLength = this.grid.length,
     i = 0,
     gridChanged = false;
+  if (key === "up") {
+    this.grid = this.rotateGrid(this.grid);
+  }
   for (; i < gridLength; i++) {
     this.grid[i] = this.slide(this.grid[i], key);
     this.combine(this.grid[i]);
     this.grid[i] = this.slide(this.grid[i], key);
+  }
+  if (key === "up") {
+    this.grid = this.rotateGridBack(this.grid);
   }
   gridChanged = this.compare(oldGrid, this.grid);
   if (gridChanged) {
@@ -154,12 +161,21 @@ MatrixModel.prototype.compare = function (grid1, grid2) {
 
 MatrixModel.prototype.rotateGrid = function (grid) {
   var newGrid = this.returnEmpty();
-  console.log(newGrid);
+  var n = 0;
   for (var i = 0; i < 4; i++) {
     for (var j = 0; j < 4; j++) {
       newGrid[i][j] = grid[j][i];
     }
   }
-  console.log(newGrid);
+  return newGrid;
+};
+
+MatrixModel.prototype.rotateGridBack = function (grid) {
+  var newGrid = this.returnEmpty();
+  for (var i = 0; i < 4; i++) {
+    for (var j = 0; j < 4; j++) {
+      newGrid[j][i] = grid[i][j];
+    }
+  }
   return newGrid;
 };
