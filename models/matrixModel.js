@@ -86,6 +86,9 @@ MatrixModel.prototype.slide = function (row, key) {
   if (key === "up") {
     arr = arr.concat(zeros);
   }
+  if (key === "down") {
+    arr = zeros.concat(arr);
+  }
 
   return arr;
 };
@@ -95,7 +98,7 @@ MatrixModel.prototype.move = function (key) {
     gridLength = this.grid.length,
     i = 0,
     gridChanged = false;
-  if (key === "up") {
+  if (key === "up" || key === "down") {
     this.grid = this.rotateGrid(this.grid);
   }
   for (; i < gridLength; i++) {
@@ -103,7 +106,7 @@ MatrixModel.prototype.move = function (key) {
     this.combine(this.grid[i]);
     this.grid[i] = this.slide(this.grid[i], key);
   }
-  if (key === "up") {
+  if (key === "up" || key === "down") {
     this.grid = this.rotateGridBack(this.grid);
   }
   gridChanged = this.compare(oldGrid, this.grid);
