@@ -23,13 +23,7 @@ Controller.prototype.onKeyDownHandler = function (event) {
       return;
   }
 
-  if (key === "up") {
-    this.summaryModel.add();
-  }
-
-  if (key === "down") {
-    this.summaryModel.decrease();
-  }
+  this.matrixModel.move(key);
 
   this.matrixModel.displayActionResults(key);
 };

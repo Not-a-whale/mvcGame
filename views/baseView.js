@@ -24,5 +24,5 @@ BaseView.prototype.reRender = function () {
 
 BaseView.prototype.beforeUpdate = function () {};
 BaseView.prototype.afterUpdate = function (elem) {
-  this.show.root.prepend(elem);
+  this.show.root.appendChild(elem);
 };

@@ -14,6 +14,7 @@ MatrixView.prototype.constructor = MatrixView;
 
 MatrixView.prototype.beforeRender = function () {
   this.matrixModel.subscribe("changeState", this.changeColor, this);
+  this.matrixModel.subscribe("itemMoved", this.reRender, this);
 };
 
 MatrixView.prototype.render = function () {

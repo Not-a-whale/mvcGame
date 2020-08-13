@@ -22,7 +22,7 @@ MatrixModel.prototype.findRandomCell = function () {
 };
 
 MatrixModel.prototype.findRandomNumber = function () {
-  return Math.random() < 0.8 ? "2" : "4";
+  return Math.random() < 0.8 ? 2 : 4;
 };
 
 MatrixModel.prototype.findRandomRowExist = function () {
@@ -70,5 +70,96 @@ MatrixModel.prototype.displayActionResults = function (key) {
 // Action depends on user click New Game event
 MatrixModel.prototype.startNewGame = function () {
   this.publish("changeState");
-  console.log(this.grid);
+};
+
+MatrixModel.prototype.slide = function (row, key) {
+  var arr = row.filter((el) => el);
+  var missing = 4 - arr.length;
+  var zeros = Array(missing).fill("");
+  if (key === "left") {
+    arr = arr.concat(zeros);
+  }
+  if (key === "right") {
+    arr = zeros.concat(arr);
+  }
+  if (key === "up") {
+    this.grid = this.rotateGrid(this.grid);
+  }
+
+  return arr;
+};
+
+MatrixModel.prototype.move = function (key) {
+  var oldGrid = this.copyGrid(this.grid),
+    gridLength = this.grid.length,
+    i = 0,
+    gridChanged = false;
+  for (; i < gridLength; i++) {
+    this.grid[i] = this.slide(this.grid[i], key);
+    this.combine(this.grid[i]);
+    this.grid[i] = this.slide(this.grid[i], key);
+  }
+  gridChanged = this.compare(oldGrid, this.grid);
+  if (gridChanged) {
+    this.findRandomCellWithoutDuplicates();
+  }
+
+  this.publish("itemMoved");
+};
+
+MatrixModel.prototype.combine = function (row) {
+  for (var i = 3; i >= 1; i--) {
+    var a = row[i];
+    parseInt(a, 10);
+    var b = row[i - 1];
+    parseInt(b, 10);
+    if (a === b) {
+      row[i] = a + b;
+      row[i - 1] = "";
+    }
+  }
+  return row;
+};
+
+MatrixModel.prototype.returnEmpty = function (grid) {
+  var empty = [
+    ["", "", "", ""],
+    ["", "", "", ""],
+    ["", "", "", ""],
+    ["", "", "", ""],
+  ];
+  return empty;
+};
+
+MatrixModel.prototype.copyGrid = function (grid) {
+  var newGrid = this.returnEmpty();
+  for (var i = 0; i < 4; i++) {
+    for (var j = 0; j < 4; j++) {
+      newGrid[i][j] = grid[i][j];
+    }
+  }
+  return newGrid;
+};
+
+MatrixModel.prototype.compare = function (grid1, grid2) {
+  for (var i = 0; i < 4; i++) {
+    for (var j = 0; j < 4; j++) {
+      if (grid1[i][j] != grid2[i][j]) {
+        return true;
+      }
+    }
+  }
+  return false;
+};
+
+MatrixModel.prototype.rotateGrid = function (grid) {
+  var newGrid = this.returnEmpty();
+  console.log(newGrid);
+  for (var i = 0; i < 4; i++) {
+    for (var j = 0; j < 4; j++) {
+      newGrid[i][j] = grid[j][i];
+    }
+  }
+  console.log(newGrid);
+  return newGrid;
 };
